@@ -9,9 +9,9 @@ class Application(models.Model):
     STATUS_CHOICES = [
         ("pending", "Pending"),
         ("applied", "Applied"),
-        ("rejected", "Rejected"),
         ("interview", "Interview"),
         ("offer", "Offer"),
+        ("rejected", "Rejected"),
     ]
 
     user = models.ForeignKey(
@@ -39,12 +39,25 @@ class Application(models.Model):
         default="pending"
     )
 
+    cover_letter = models.TextField(null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
+
     applied_at = models.DateTimeField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ("user", "job")
+         unique_together = ("user", "job")
+         ordering = ["-created_at"]
+         indexes = [
+         models.Index(fields=["user", "status"]),
+        ]
+
+
+
+   
+    
 
     def __str__(self):
-        return f"{self.user.email} - {self.job.title}"
+        return f"{self.user.email} - {self.job.title} ({self.status})"
