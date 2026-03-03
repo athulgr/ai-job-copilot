@@ -16,6 +16,7 @@ class Resume(models.Model):
     version = models.IntegerField(default=1)
 
     file = models.FileField(upload_to="resumes/")
+    
 
     parsed_data = models.JSONField(blank=True, null=True)
 
